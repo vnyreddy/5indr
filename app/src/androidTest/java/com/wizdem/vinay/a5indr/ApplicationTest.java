@@ -1,4 +1,4 @@
-package com.example.vinay.a5indr;
+package com.wizdem.vinay.a5indr;
 
 import android.app.Application;
 import android.test.ApplicationTestCase;

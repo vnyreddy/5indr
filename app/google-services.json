@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "847868909295",
+    "firebase_url": "https://indr-b46dd.firebaseio.com",
+    "project_id": "indr-b46dd",
+    "storage_bucket": "indr-b46dd.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:847868909295:android:72a9524d28038bd2",
+        "android_client_info": {
+          "package_name": "com.wizdem.vinay.a5indr"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "847868909295-8qbetac11p5l7affkhflnhi3pud3b790.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB5Po5KmBhWY5BJkIzmw75Iphio9aqFx3E"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

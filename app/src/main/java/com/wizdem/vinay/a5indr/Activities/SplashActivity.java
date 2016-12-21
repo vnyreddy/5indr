@@ -1,11 +1,11 @@
-package com.example.vinay.a5indr.Activities;
+package com.wizdem.vinay.a5indr.Activities;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 
-import com.example.vinay.a5indr.R;
+import com.wizdem.vinay.a5indr.R;
 
 /**
  * Created by vinay on 6/26/2016.

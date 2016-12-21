@@ -3,9 +3,8 @@ apply plugin: 'com.android.application'
 android {
     compileSdkVersion 23
     buildToolsVersion "23.0.2"
-
     defaultConfig {
-        applicationId "com.example.vinay.a5indr"
+        applicationId 'com.wizdem.vinay.a5indr'
         minSdkVersion 18
         targetSdkVersion 23
         versionCode 1
@@ -17,19 +16,21 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+    productFlavors {
+    }
 }
 repositories {
     mavenCentral()
 }
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
-    testCompile 'junit:junit:4.12'
-    //    compile project(path: ':facebook')
     compile 'com.android.support:appcompat-v7:23.4.0'
     compile 'com.android.support:design:23.4.0'
-    compile 'com.facebook.android:facebook-android-sdk:[4,5)'
-    compile 'com.google.android.gms:play-services-maps:9.2.0'
-    compile 'com.google.android.gms:play-services-appindexing:9.2.0'
-    compile 'com.google.android.gms:play-services-drive:9.2.0'
     compile 'com.android.support:support-v4:23.4.0'
+    compile 'com.google.firebase:firebase-auth:9.2.0'
+    compile 'com.google.android.gms:play-services-auth:9.2.0'
+
+    testCompile 'junit:junit:4.12'
 }
+
+apply plugin: 'com.google.gms.google-services'

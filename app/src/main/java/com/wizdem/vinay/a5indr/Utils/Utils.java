@@ -1,4 +1,4 @@
-package com.example.vinay.a5indr.Utils;
+package com.wizdem.vinay.a5indr.Utils;
 
 /**
  * Created by vinay_1 on 10/16/2016.

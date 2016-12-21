@@ -1,4 +1,4 @@
-package com.example.vinay.a5indr.Activities;
+package com.wizdem.vinay.a5indr.Activities;
 
 import android.app.Activity;
 import android.hardware.Sensor;
@@ -12,7 +12,7 @@ import android.view.animation.RotateAnimation;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.example.vinay.a5indr.R;
+import com.wizdem.vinay.a5indr.R;
 
 public class CompassActivity extends Activity implements SensorEventListener{
     private ImageView mCompassImage;

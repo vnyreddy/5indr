@@ -1,4 +1,4 @@
-package com.example.vinay.a5indr.models;
+package com.wizdem.vinay.a5indr.models;
 
 import java.io.Serializable;
 

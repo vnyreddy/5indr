@@ -33,7 +33,7 @@
             android:inputType="textPersonName"
             android:text="Enter User Id"
             android:ems="10"
-            android:id="@+id/editText"
+            android:id="@+id/email"
             android:layout_gravity="center_horizontal" />
 
         <EditText
@@ -41,24 +41,42 @@
             android:layout_height="wrap_content"
             android:inputType="textPassword"
             android:ems="10"
-            android:id="@+id/editText2"
+            android:id="@+id/password"
             android:text="Password" />
 
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Login"
-            android:id="@+id/login_button_sample"
+            android:id="@+id/login_button"
             android:layout_below="@+id/textView2"
             android:layout_centerHorizontal="true"
-            android:layout_gravity="center_horizontal" />
+            android:layout_gravity="center_horizontal"
+            android:onClick="onClick"/>
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Register"
+            android:id="@+id/register_button"
+            android:layout_below="@+id/login_button"
+            android:layout_centerHorizontal="true"
+            android:layout_gravity="center_horizontal"
+            android:onClick="onClick"/>
+        <com.google.android.gms.common.SignInButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/google_signin"
+            android:layout_below="@+id/register_button"
+            android:layout_centerHorizontal="true"
+            android:onClick="onClick">
 
-        <com.facebook.login.widget.LoginButton
+        </com.google.android.gms.common.SignInButton>
+        <!--<com.facebook.login.widget.LoginButton
             android:id="@+id/facebookLoginButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
-            android:layout_marginTop="50dp" />
+            android:layout_marginTop="50dp" />-->
 
     </LinearLayout>
 
