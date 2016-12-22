@@ -7,6 +7,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -14,9 +15,14 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.UserInfo;
+import com.squareup.picasso.Picasso;
 import com.wizdem.vinay.a5indr.R;
 import com.wizdem.vinay.a5indr.Services.FindLocation;
 
@@ -29,26 +35,52 @@ public class MainActivity extends AppCompatActivity {
     private Button mLogOutBtn;
     private FirebaseAuth mAuth;
     private FirebaseAuth.AuthStateListener mAuthListener;
+    private ImageView mGoogleUserImg;
+    private FirebaseUser user;
+    private TextView mGoogleUserName;
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         runtime_permissions();
+        mGoogleUserName = (TextView) findViewById(R.id.google_user_name);
+        mGoogleUserImg = (ImageView)findViewById(R.id.google_user_img);
+        textView = (TextView) findViewById(R.id.text);
+        mLogOutBtn = (Button) findViewById(R.id.google_logout);
         mAuth = FirebaseAuth.getInstance();
+        user = mAuth.getCurrentUser();
+        if(mAuth.getCurrentUser() != null){
+            for (UserInfo profile : user.getProviderData()) {
+                // Id of the provider (ex: google.com)
+                String providerId = profile.getProviderId();
+
+                // UID specific to the provider
+                String uid = profile.getUid();
+
+                // Name, email address, and profile photo Url
+                String name = profile.getDisplayName();
+                mGoogleUserName.setText(name);
+                String email = profile.getEmail();
+                String photoUrl = String.valueOf(profile.getPhotoUrl());
+                photoUrl= photoUrl.replace("/s96-c/","/s300-c/");
+                Picasso.with(this).load(photoUrl).into(mGoogleUserImg);
+            };
+        }
         mAuthListener = new FirebaseAuth.AuthStateListener() {
             @Override
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
                 if (firebaseAuth.getCurrentUser() == null) {
                     startActivity(new Intent(MainActivity.this, LoginActivity.class));
+                    finish();
                 }
             }
         };
-        textView = (TextView) findViewById(R.id.text);
-        mLogOutBtn = (Button) findViewById(R.id.google_logout);
+
         mLogOutBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 mAuth.signOut();
+
             }
         });
     }
@@ -113,5 +145,8 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public void onStop() {
         super.onStop();
+        if(mAuthListener != null){
+            mAuth.removeAuthStateListener(mAuthListener);
+        }
     }
 }

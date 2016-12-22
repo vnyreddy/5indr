@@ -35,29 +35,43 @@ import java.io.IOException;
  * Created by vinay on 6/26/2016.
  */
 public class LoginActivity extends AppCompatActivity implements View.OnClickListener {
+    private static final int RC_SIGN_IN = 2;
     private Button login_buttion1;
     private Button register_button;
     private FirebaseAuth mAuth;
     private FirebaseAuth.AuthStateListener mAuthListener;
     private EditText email;
     private EditText password;
-    private static String TAG="LoginActivity";
+    private static String TAG = "LoginActivity";
     private ProgressDialog mProgressDialog;
     private SignInButton mGoogleBtn;
-    private static final int RC_SIGN_IN=1;
     private GoogleApiClient mGoogleApiClient;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-      //  FacebookSdk.sdkInitialize(getApplicationContext());
+        //  FacebookSdk.sdkInitialize(getApplicationContext());
         setContentView(R.layout.login_activity_layout);
         mAuth = FirebaseAuth.getInstance();
         login_buttion1 = (Button) findViewById(R.id.login_button);
-        register_button= (Button) findViewById(R.id.register_button);
-        email = (EditText)findViewById(R.id.email);
-        password = (EditText)findViewById(R.id.password);
-        mGoogleBtn = (SignInButton)findViewById(R.id.google_signin);
+        register_button = (Button) findViewById(R.id.register_button);
+        email = (EditText) findViewById(R.id.email);
+        password = (EditText) findViewById(R.id.password);
+        mGoogleBtn = (SignInButton) findViewById(R.id.google_signin);
 
+// Configure Google Sign In
+        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestIdToken(getString(R.string.default_web_client_id))
+                .requestEmail()
+                .build();
+        mGoogleApiClient = new GoogleApiClient.Builder(getApplicationContext())
+                .enableAutoManage(this, new GoogleApiClient.OnConnectionFailedListener() {
+                    @Override
+                    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
+                        Toast.makeText(LoginActivity.this, "Error encountered", Toast.LENGTH_SHORT).show();
+                    }
+                }).addApi(Auth.GOOGLE_SIGN_IN_API, gso)
+                .build();
 
         mProgressDialog = new ProgressDialog(this);
         mAuthListener = new FirebaseAuth.AuthStateListener() {
@@ -66,26 +80,14 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 FirebaseUser user = firebaseAuth.getCurrentUser();
                 if (user != null) {
                     Log.d(TAG, "onAuthStateChaged:signed_in:" + user.getUid());
-                    startActivity(new Intent(LoginActivity.this,MainActivity.class));
+                    startActivity(new Intent(LoginActivity.this, MainActivity.class));
                 } else {
                     Log.d(TAG, "onAuthStateChanged:signed_out");
+                    //  googleSignIn();
                 }
             }
         };
 
-        // Configure Google Sign In
-        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                .requestIdToken(getString(R.string.default_web_client_id))
-                .requestEmail()
-                .build();
-        mGoogleApiClient = new GoogleApiClient.Builder(getApplicationContext())
-                .enableAutoManage(this, new GoogleApiClient.OnConnectionFailedListener() {
-                            @Override
-                            public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
-                            Toast.makeText(LoginActivity.this,"Error encountered",Toast.LENGTH_SHORT).show();
-                            }
-                        }).addApi(Auth.GOOGLE_SIGN_IN_API, gso)
-                .build();
 
         mGoogleBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -96,49 +98,53 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
 
     }
+
     private void googleSignIn() {
+        mProgressDialog.show();
         Intent signInIntent = Auth.GoogleSignInApi.getSignInIntent(mGoogleApiClient);
         startActivityForResult(signInIntent, RC_SIGN_IN);
     }
 
-    private void createAccount(){
+    private void createAccount() {
         String e_Mail = email.getText().toString().trim();
         String e_password = password.getText().toString().trim();
         mProgressDialog.setMessage("Creating User...");
         mProgressDialog.show();
-        mAuth.createUserWithEmailAndPassword(e_Mail,e_password)
+        mAuth.createUserWithEmailAndPassword(e_Mail, e_password)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         mProgressDialog.hide();
-                        Toast.makeText(getApplicationContext(),"Sucess",Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getApplicationContext(), "Sucess", Toast.LENGTH_SHORT).show();
                        /* startActivity(new Intent(LoginActivity.this, MainActivity.class));
                         finish();*/
                     }
                 });
 
     }
-    private void signIn(){
+
+    private void signIn() {
         String e_Mail = email.getText().toString().trim();
         String e_password = password.getText().toString().trim();
-        mAuth.signInWithEmailAndPassword(e_Mail,e_password).addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+        mAuth.signInWithEmailAndPassword(e_Mail, e_password).addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
-                Log.d(TAG,"signInWithEmail:onComplete:"+task.isSuccessful());
-                if(!task.isSuccessful()){
-                    Log.w(TAG,"signInWithEmail",task.getException());
-                    Toast.makeText(getApplicationContext(),"Authentication failed.",Toast.LENGTH_SHORT).show();
+                Log.d(TAG, "signInWithEmail:onComplete:" + task.isSuccessful());
+                if (!task.isSuccessful()) {
+                    Log.w(TAG, "signInWithEmail", task.getException());
+                    Toast.makeText(getApplicationContext(), "Authentication failed.", Toast.LENGTH_SHORT).show();
                 }
-               // startActivity(new Intent(LoginActivity.this, MainActivity.class));
-               // finish();
+                // startActivity(new Intent(LoginActivity.this, MainActivity.class));
+                // finish();
             }
         });
 
     }
+
     @Override
     protected void onStop() {
         super.onStop();
-        if(mAuthListener != null){
+        if (mAuthListener != null) {
             mAuth.removeAuthStateListener(mAuthListener);
         }
     }
@@ -151,7 +157,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
+       // super.onActivityResult(requestCode, resultCode, data);
 
         // Result returned from launching the Intent from GoogleSignInApi.getSignInIntent(...);
         if (requestCode == RC_SIGN_IN) {
@@ -160,6 +166,18 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 // Google Sign In was successful, authenticate with Firebase
                 GoogleSignInAccount account = result.getSignInAccount();
                 firebaseAuthWithGoogle(account);
+// this prevent login same your for next time
+                Auth.GoogleSignInApi.signOut(mGoogleApiClient);
+              /*
+               //Call back ofter signOut
+               Auth.GoogleSignInApi.signOut(mGoogleApiClient).setResultCallback(
+                        new ResultCallback<Status>() {
+                            @Override
+                            public void onResult(Status status) {
+                                // ...
+                            }
+                        });*/
+
             } else {
                 // Google Sign In failed, update UI appropriately
                 // ...
@@ -185,7 +203,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                             Toast.makeText(LoginActivity.this, "Authentication failed.",
                                     Toast.LENGTH_SHORT).show();
                         }
-                        // ...
+                        mProgressDialog.show();
                     }
                 });
     }
@@ -195,13 +213,13 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         if (v == login_buttion1) {
             String e_Mail = email.getText().toString().trim();
             String e_password = password.getText().toString().trim();
-            if(TextUtils.isEmpty(e_Mail)|| TextUtils.isEmpty(e_password)){
-                Toast.makeText(this,"Email or Password in Empty",Toast.LENGTH_SHORT).show();
+            if (TextUtils.isEmpty(e_Mail) || TextUtils.isEmpty(e_password)) {
+                Toast.makeText(this, "Email or Password in Empty", Toast.LENGTH_SHORT).show();
             }
             signIn();
 
         }
-        if (v == register_button){
+        if (v == register_button) {
             createAccount();
         }
 
