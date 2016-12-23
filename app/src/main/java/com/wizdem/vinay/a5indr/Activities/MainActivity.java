@@ -22,6 +22,8 @@ import android.widget.TextView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.UserInfo;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.squareup.picasso.Picasso;
 import com.wizdem.vinay.a5indr.R;
 import com.wizdem.vinay.a5indr.Services.FindLocation;
@@ -38,6 +40,10 @@ public class MainActivity extends AppCompatActivity {
     private ImageView mGoogleUserImg;
     private FirebaseUser user;
     private TextView mGoogleUserName;
+    private Button mSaveLocation;
+    private static String mCoordinates;
+    private FirebaseDatabase mFirebaseDatabase;
+    private DatabaseReference mFirebaseDB_Reference;
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -47,6 +53,9 @@ public class MainActivity extends AppCompatActivity {
         mGoogleUserImg = (ImageView)findViewById(R.id.google_user_img);
         textView = (TextView) findViewById(R.id.text);
         mLogOutBtn = (Button) findViewById(R.id.google_logout);
+        mSaveLocation = (Button) findViewById(R.id.save_location);
+        mFirebaseDatabase = FirebaseDatabase.getInstance();
+        mFirebaseDB_Reference = mFirebaseDatabase.getReference("message1");
         mAuth = FirebaseAuth.getInstance();
         user = mAuth.getCurrentUser();
         if(mAuth.getCurrentUser() != null){
@@ -83,6 +92,16 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
+        mSaveLocation.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                saveLocation();
+            }
+        });
+    }
+
+    private void saveLocation() {
+        mFirebaseDB_Reference.setValue(mCoordinates);
     }
 
     @Override
@@ -92,8 +111,8 @@ public class MainActivity extends AppCompatActivity {
             broadcastReceiver = new BroadcastReceiver() {
                 @Override
                 public void onReceive(Context context, Intent intent) {
-                    String a = (String) intent.getExtras().get("coordinates");
-                    textView.setText(a);
+                    mCoordinates = (String) intent.getExtras().get("coordinates");
+                    textView.setText(mCoordinates);
                 }
             };
 
