@@ -6,6 +6,16 @@ import java.io.Serializable;
  * Created by vinay_1 on 10/16/2016.
  */
 
-public class Users implements Serializable {
+public class Users {
+    public String username;
+    public String email;
+
+    public Users (){
+
+    }
+    public Users(String username,String email){
+        this.username = username;
+        this.email = email;
+    }
 
 }

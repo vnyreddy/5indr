@@ -15,6 +15,7 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -27,12 +28,18 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.squareup.picasso.Picasso;
 import com.wizdem.vinay.a5indr.R;
 import com.wizdem.vinay.a5indr.Services.FindLocation;
+import com.wizdem.vinay.a5indr.models.SaveLocation;
+import com.wizdem.vinay.a5indr.models.Users;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 
 public class MainActivity extends AppCompatActivity {
 
     private BroadcastReceiver broadcastReceiver;
     private TextView textView;
+    private EditText editText;
     private Intent intent;
     private Button mLogOutBtn;
     private FirebaseAuth mAuth;
@@ -44,6 +51,11 @@ public class MainActivity extends AppCompatActivity {
     private static String mCoordinates;
     private FirebaseDatabase mFirebaseDatabase;
     private DatabaseReference mFirebaseDB_Reference;
+    private String uid;
+    private String name;
+    private String email;
+    private SimpleDateFormat mDateStamp;
+    private String cMessage;
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -53,27 +65,32 @@ public class MainActivity extends AppCompatActivity {
         mGoogleUserImg = (ImageView)findViewById(R.id.google_user_img);
         textView = (TextView) findViewById(R.id.text);
         mLogOutBtn = (Button) findViewById(R.id.google_logout);
+        editText = (EditText)findViewById(R.id.message_id);
+
         mSaveLocation = (Button) findViewById(R.id.save_location);
+        mDateStamp = new SimpleDateFormat("ddMMyyyyhhmmss");
+
         mFirebaseDatabase = FirebaseDatabase.getInstance();
-        mFirebaseDB_Reference = mFirebaseDatabase.getReference("message1");
+
+        mFirebaseDB_Reference = mFirebaseDatabase.getReference();
+
         mAuth = FirebaseAuth.getInstance();
         user = mAuth.getCurrentUser();
         if(mAuth.getCurrentUser() != null){
-            for (UserInfo profile : user.getProviderData()) {
+
                 // Id of the provider (ex: google.com)
-                String providerId = profile.getProviderId();
+                String providerId = user.getProviderId();
 
                 // UID specific to the provider
-                String uid = profile.getUid();
+                uid = user.getUid();
 
                 // Name, email address, and profile photo Url
-                String name = profile.getDisplayName();
+               name = user.getDisplayName();
                 mGoogleUserName.setText(name);
-                String email = profile.getEmail();
-                String photoUrl = String.valueOf(profile.getPhotoUrl());
+               email = user.getEmail();
+                String photoUrl = String.valueOf(user.getPhotoUrl());
                 photoUrl= photoUrl.replace("/s96-c/","/s300-c/");
                 Picasso.with(this).load(photoUrl).into(mGoogleUserImg);
-            };
         }
         mAuthListener = new FirebaseAuth.AuthStateListener() {
             @Override
@@ -95,13 +112,23 @@ public class MainActivity extends AppCompatActivity {
         mSaveLocation.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                saveLocation();
+                cMessage = editText.getText().toString().trim();
+                writeNewUser(uid,name,email);
+                saveLocation(mCoordinates,cMessage);
             }
         });
     }
 
-    private void saveLocation() {
-        mFirebaseDB_Reference.setValue(mCoordinates);
+    private void saveLocation(String coordiantes, String message) {
+        String stamp = mDateStamp.format(new Date());
+        SaveLocation saveLocation = new SaveLocation(coordiantes,message);
+        mFirebaseDB_Reference.child("Location").child(uid).child(stamp).setValue(saveLocation);
+
+
+    }
+    private void writeNewUser(String userID, String name, String email){
+        Users user = new Users(name,email);
+        mFirebaseDB_Reference.child("User").child(userID).setValue(user);
     }
 
     @Override

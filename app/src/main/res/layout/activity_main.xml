@@ -29,6 +29,12 @@
       android:text="LogOut"
       android:id="@+id/google_logout"
       android:layout_centerHorizontal="true"/>
+  <EditText
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:hint="Type your message.."
+      android:id="@+id/message_id"
+      android:inputType="textLongMessage" />
   <Button
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
