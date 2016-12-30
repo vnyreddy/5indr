@@ -28,6 +28,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.squareup.picasso.Picasso;
 import com.wizdem.vinay.a5indr.R;
 import com.wizdem.vinay.a5indr.Services.FindLocation;
+import com.wizdem.vinay.a5indr.Utils.Utils;
 import com.wizdem.vinay.a5indr.models.SaveLocation;
 import com.wizdem.vinay.a5indr.models.Users;
 
@@ -48,14 +49,18 @@ public class MainActivity extends AppCompatActivity {
     private FirebaseUser user;
     private TextView mGoogleUserName;
     private Button mSaveLocation;
+    private Button mViewMap;
+    private Button mViewHistory;
     private static String mCoordinates;
     private FirebaseDatabase mFirebaseDatabase;
     private DatabaseReference mFirebaseDB_Reference;
-    private String uid;
+   // private Utils uid;
     private String name;
     private String email;
     private SimpleDateFormat mDateStamp;
     private String cMessage;
+  //  private String mLatitude;
+  //  private String mLongitude;
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -66,6 +71,8 @@ public class MainActivity extends AppCompatActivity {
         textView = (TextView) findViewById(R.id.text);
         mLogOutBtn = (Button) findViewById(R.id.google_logout);
         editText = (EditText)findViewById(R.id.message_id);
+        mViewMap = (Button)findViewById(R.id.map_view);
+        mViewHistory = (Button) findViewById(R.id.view_history);
 
         mSaveLocation = (Button) findViewById(R.id.save_location);
         mDateStamp = new SimpleDateFormat("ddMMyyyyhhmmss");
@@ -82,7 +89,7 @@ public class MainActivity extends AppCompatActivity {
                 String providerId = user.getProviderId();
 
                 // UID specific to the provider
-                uid = user.getUid();
+                Utils.uid = user.getUid();
 
                 // Name, email address, and profile photo Url
                name = user.getDisplayName();
@@ -113,16 +120,32 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 cMessage = editText.getText().toString().trim();
-                writeNewUser(uid,name,email);
-                saveLocation(mCoordinates,cMessage);
+                writeNewUser(Utils.uid,name,email);
+                saveLocation(cMessage,Utils.latitude,Utils.longitude);
+            }
+        });
+
+        mViewMap.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(MainActivity.this,MapsActivity.class));
+            }
+        });
+
+        mViewHistory.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(MainActivity.this,HistoryActivity.class));
             }
         });
     }
 
-    private void saveLocation(String coordiantes, String message) {
+
+
+    private void saveLocation(String message, double longitude, double latitude) {
         String stamp = mDateStamp.format(new Date());
-        SaveLocation saveLocation = new SaveLocation(coordiantes,message);
-        mFirebaseDB_Reference.child("Location").child(uid).child(stamp).setValue(saveLocation);
+        SaveLocation saveLocation = new SaveLocation(message,latitude,longitude);
+        mFirebaseDB_Reference.child("Location").child(Utils.uid).child(stamp).setValue(saveLocation);
 
 
     }
@@ -138,8 +161,9 @@ public class MainActivity extends AppCompatActivity {
             broadcastReceiver = new BroadcastReceiver() {
                 @Override
                 public void onReceive(Context context, Intent intent) {
-                    mCoordinates = (String) intent.getExtras().get("coordinates");
-                    textView.setText(mCoordinates);
+                   double mLatitude = (double) intent.getExtras().get("latitude");
+                   double mLongitude = (double) intent.getExtras().get("longitude");
+                    textView.setText(mLatitude+" "+mLongitude);
                 }
             };
 

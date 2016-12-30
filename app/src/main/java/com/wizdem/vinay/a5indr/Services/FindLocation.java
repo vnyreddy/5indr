@@ -11,6 +11,8 @@ import android.os.IBinder;
 import android.provider.Settings;
 import android.support.annotation.Nullable;
 
+import com.wizdem.vinay.a5indr.Utils.Utils;
+
 /**
  * Created by vinay_1 on 12/18/2016.
  */
@@ -28,8 +30,11 @@ public class FindLocation extends Service {
         listener = new LocationListener() {
             @Override
             public void onLocationChanged(Location location) {
+                Utils.latitude= location.getLatitude();
+                Utils.longitude=location.getLongitude();
                 Intent i = new Intent("location_update");
-                i.putExtra("coordinates",location.getLatitude()+" "+location.getLongitude());
+                i.putExtra("latitude",location.getLatitude());
+                i.putExtra("longitude",location.getLongitude());
                 sendBroadcast(i);
             }
 

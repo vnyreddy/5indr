@@ -11,6 +11,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp"
         android:id="@+id/linearLayout">
 
 
@@ -30,22 +32,26 @@
         <EditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:background="@drawable/edit__text_outline"
             android:inputType="textPersonName"
             android:text="Enter User Id"
             android:ems="10"
             android:id="@+id/email"
-            android:layout_gravity="center_horizontal" />
+            android:layout_gravity="center_horizontal"
+            android:layout_marginBottom="10dp"/>
 
         <EditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:background="@drawable/edit__text_outline"
             android:inputType="textPassword"
             android:ems="10"
             android:id="@+id/password"
-            android:text="Password" />
+            android:text="Password"
+            android:layout_marginBottom="10dp"/>
 
         <Button
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Login"
             android:id="@+id/login_button"
@@ -54,7 +60,7 @@
             android:layout_gravity="center_horizontal"
             android:onClick="onClick"/>
         <Button
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Register"
             android:id="@+id/register_button"
@@ -62,12 +68,14 @@
             android:layout_centerHorizontal="true"
             android:layout_gravity="center_horizontal"
             android:onClick="onClick"/>
+
         <com.google.android.gms.common.SignInButton
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/google_signin"
             android:layout_below="@+id/register_button"
             android:layout_centerHorizontal="true"
+            android:layout_gravity="center_horizontal"
             android:onClick="onClick">
 
         </com.google.android.gms.common.SignInButton>

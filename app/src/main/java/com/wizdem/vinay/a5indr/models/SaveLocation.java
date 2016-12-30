@@ -5,14 +5,16 @@ package com.wizdem.vinay.a5indr.models;
  */
 
 public class SaveLocation {
-    public String coordinates;
+    public double latitude;
+    public double logitude;
     public String message;
 
     public SaveLocation(){
 
     }
-    public SaveLocation(String coordinates,String message){
-        this.coordinates = coordinates;
+    public SaveLocation(String message, double longitude, double latitude) {
+        this.latitude = latitude;
+        this.logitude = longitude;
         this.message = message;
     }
 }
