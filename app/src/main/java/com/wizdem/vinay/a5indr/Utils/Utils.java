@@ -1,6 +1,7 @@
 package com.wizdem.vinay.a5indr.Utils;
 
 import com.wizdem.vinay.a5indr.models.SaveLocation;
+import com.wizdem.vinay.a5indr.models.Users;
 
 import java.util.ArrayList;
 
@@ -16,6 +17,8 @@ public class Utils {
     public static ArrayList<Double> lat;
     public static ArrayList<Double> lon;
     public static ArrayList<SaveLocation> saveLocations;
+    public static String user_name;
+    public static String photoUrl;
 
 
     public static void Method1(){

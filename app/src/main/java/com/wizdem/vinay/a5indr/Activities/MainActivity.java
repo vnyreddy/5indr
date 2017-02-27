@@ -59,6 +59,7 @@ public class MainActivity extends AppCompatActivity {
     private String email;
     private SimpleDateFormat mDateStamp;
     private String cMessage;
+    private String mStamp;
   //  private String mLatitude;
   //  private String mLongitude;
 
@@ -76,6 +77,7 @@ public class MainActivity extends AppCompatActivity {
 
         mSaveLocation = (Button) findViewById(R.id.save_location);
         mDateStamp = new SimpleDateFormat("ddMMyyyyhhmmss");
+        mStamp = mDateStamp.format(new Date());
 
         mFirebaseDatabase = FirebaseDatabase.getInstance();
 
@@ -92,11 +94,11 @@ public class MainActivity extends AppCompatActivity {
                 Utils.uid = user.getUid();
 
                 // Name, email address, and profile photo Url
-               name = user.getDisplayName();
-                mGoogleUserName.setText(name);
+               Utils.user_name = user.getDisplayName();
+                mGoogleUserName.setText(Utils.user_name);
                email = user.getEmail();
-                String photoUrl = String.valueOf(user.getPhotoUrl());
-                photoUrl= photoUrl.replace("/s96-c/","/s300-c/");
+                Utils.photoUrl = String.valueOf(user.getPhotoUrl());
+                String photoUrl= Utils.photoUrl.replace("/s96-c/","/s300-c/");
                 Picasso.with(this).load(photoUrl).into(mGoogleUserImg);
         }
         mAuthListener = new FirebaseAuth.AuthStateListener() {
@@ -120,8 +122,8 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 cMessage = editText.getText().toString().trim();
-                writeNewUser(Utils.uid,name,email);
-                saveLocation(cMessage,Utils.latitude,Utils.longitude);
+                writeNewUser(Utils.uid,Utils.user_name,email);
+                saveLocation(cMessage,Utils.latitude,Utils.longitude,mStamp);
             }
         });
 
@@ -142,10 +144,10 @@ public class MainActivity extends AppCompatActivity {
 
 
 
-    private void saveLocation(String message, double longitude, double latitude) {
-        String stamp = mDateStamp.format(new Date());
-        SaveLocation saveLocation = new SaveLocation(message,latitude,longitude);
-        mFirebaseDB_Reference.child("Location").child(Utils.uid).child(stamp).setValue(saveLocation);
+    private void saveLocation(String message, double longitude, double latitude, String time) {
+    //    String stamp = mDateStamp.format(new Date());
+        SaveLocation saveLocation = new SaveLocation(message,latitude,longitude,time);
+        mFirebaseDB_Reference.child("Location").child(Utils.uid).child(mStamp).setValue(saveLocation);
 
 
     }
