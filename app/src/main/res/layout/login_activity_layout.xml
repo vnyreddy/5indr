@@ -1,21 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     xmlns:tools="http://schemas.android.com/tools"
     android:background="#ecb510"
-    tools:context=".Activities.LoginActivity">
+    tools:context=".Activities.LoginActivity"
+    android:orientation="vertical">
 
-    <LinearLayout
+   <!-- <LinearLayout
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
         android:paddingLeft="16dp"
         android:paddingRight="16dp"
-        android:id="@+id/linearLayout">
+        android:id="@+id/linearLayout">-->
 
+    <View
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_weight="1">
 
+    </View>
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -27,7 +33,7 @@
             android:layout_above="@+id/linearLayout"
             android:layout_alignParentStart="true"
             android:layout_marginBottom="39dp"
-            android:layout_gravity="center_horizontal" />
+            android:layout_gravity="center" />
 
         <EditText
             android:layout_width="match_parent"
@@ -79,13 +85,20 @@
             android:onClick="onClick">
 
         </com.google.android.gms.common.SignInButton>
-        <!--<com.facebook.login.widget.LoginButton
-            android:id="@+id/facebookLoginButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginTop="50dp" />-->
+    <View
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_weight="1">
 
-    </LinearLayout>
+    </View>
 
-</RelativeLayout>
+    <!--<com.facebook.login.widget.LoginButton
+        android:id="@+id/facebookLoginButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="50dp" />-->
+
+<!--    </LinearLayout>-->
+
+</LinearLayout>

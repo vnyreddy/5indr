@@ -66,7 +66,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        runtime_permissions();
+       // runtime_permissions();
         mGoogleUserName = (TextView) findViewById(R.id.google_user_name);
         mGoogleUserImg = (ImageView)findViewById(R.id.google_user_img);
         textView = (TextView) findViewById(R.id.text);
@@ -85,6 +85,7 @@ public class MainActivity extends AppCompatActivity {
 
         mAuth = FirebaseAuth.getInstance();
         user = mAuth.getCurrentUser();
+        
         if(mAuth.getCurrentUser() != null){
 
                 // Id of the provider (ex: google.com)
@@ -121,9 +122,12 @@ public class MainActivity extends AppCompatActivity {
         mSaveLocation.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                double mLatitude = Utils.latitude;
+                double mLongitude = Utils.longitude;
+                textView.setText("Your location: "+mLatitude+" "+mLongitude);
                 cMessage = editText.getText().toString().trim();
                 writeNewUser(Utils.uid,Utils.user_name,email);
-                saveLocation(cMessage,Utils.latitude,Utils.longitude,mStamp);
+                saveLocation(cMessage,mLatitude,mLongitude,mStamp);
             }
         });
 
@@ -155,11 +159,12 @@ public class MainActivity extends AppCompatActivity {
         Users user = new Users(name,email);
         mFirebaseDB_Reference.child("User").child(userID).setValue(user);
     }
-
+/*
     @Override
     protected void onResume() {
         super.onResume();
-        if (broadcastReceiver == null) {
+
+*//*        if (broadcastReceiver == null) {
             broadcastReceiver = new BroadcastReceiver() {
                 @Override
                 public void onReceive(Context context, Intent intent) {
@@ -169,21 +174,27 @@ public class MainActivity extends AppCompatActivity {
                 }
             };
 
-        }
-        registerReceiver(broadcastReceiver, new IntentFilter("location_update"));
-    }
+        }*//*
+      //  registerReceiver(broadcastReceiver, new IntentFilter("location_update"));
+    }*/
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        if (broadcastReceiver != null) {
-            unregisterReceiver(broadcastReceiver);
-
+        if(intent != null){
+            stopService(intent);
+        }
+        if(mAuthListener != null){
+            mAuth.removeAuthStateListener(mAuthListener);
         }
 //        stopService(intent);
+    /*    if (broadcastReceiver != null) {
+            unregisterReceiver(broadcastReceiver);
+
+        }*/
     }
 
-    @Override
+/*    @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         if (requestCode == 100) {
@@ -194,7 +205,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    //*************Requesting permissions**********************************************************************************
+    /*//*************Requesting permissions**********************************************************************************
     private boolean runtime_permissions() {
         if (Build.VERSION.SDK_INT >= 23 &&
                 ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
@@ -204,7 +215,7 @@ public class MainActivity extends AppCompatActivity {
             return true;
         }
         return false;
-    }
+    }*/
 
     @Override
     public void onStart() {
@@ -215,10 +226,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
-    public void onStop() {
-        super.onStop();
-        if(mAuthListener != null){
-            mAuth.removeAuthStateListener(mAuthListener);
-        }
+    public void onBackPressed() {
+        super.onBackPressed();
     }
 }

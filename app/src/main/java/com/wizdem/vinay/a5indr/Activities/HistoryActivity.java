@@ -24,7 +24,7 @@ import static com.wizdem.vinay.a5indr.Utils.Utils.saveLocations;
 public class HistoryActivity extends AppCompatActivity {
 
     private TextView mViewHistory;
-    private Firebase dbRef;
+    private Firebase dbRef,ref;
     private boolean bipass;
     private RecyclerView recyclerView;
     private HistoryAdapter adapter;
@@ -41,20 +41,33 @@ public class HistoryActivity extends AppCompatActivity {
 
 
         String s = (String) Utils.uid;
+        String s2 = "dX8rtORkKLfClFy1lZuqzqekknY2";
         try {
-            dbRef = new Firebase("https://indr-b46dd.firebaseio.com/Location"+"/"+s);
+           // dbRef = new Firebase("https://indr-b46dd.firebaseio.com/Location"+"/");
+
+            dbRef = new Firebase("https://indr-b46dd.firebaseio.com/Location"+"/");
+            ref = dbRef.child(s2);
+            function();
+            ref = dbRef.child(s);
+            function();
+
         }catch (Exception e){
             e.printStackTrace();
         }
-        dbRef.addValueEventListener(new ValueEventListener() {
+
+
+    }
+
+    void function(){
+        ref.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 for (DataSnapshot dataSnapshot1 : dataSnapshot.getChildren()) {
                     try {
                         SaveLocation history = dataSnapshot1.getValue(SaveLocation.class);
-                     //   Toast.makeText(getApplication(),history.message,Toast.LENGTH_SHORT).show();
+                        //   Toast.makeText(getApplication(),history.message,Toast.LENGTH_SHORT).show();
                         if(!bipass){
-                           saveLocations = new ArrayList<SaveLocation>();
+                            saveLocations = new ArrayList<SaveLocation>();
                             /*Utils.lat=new ArrayList<Double>();
                             Utils.lon=new ArrayList<Double>();*/
                             bipass=true;

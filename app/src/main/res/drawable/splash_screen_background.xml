@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:drawable="@color/green_light"/>
+    <item>
+        <bitmap android:src="@drawable/splash_fragment_ic_img" android:tint="@color/green_light"
+            android:gravity="center"/>
+    </item>
+
+</layer-list>

@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.os.Binder;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.provider.Settings;
@@ -19,6 +20,7 @@ import com.wizdem.vinay.a5indr.Utils.Utils;
 public class FindLocation extends Service {
     private LocationListener listener;
     private LocationManager locationManager;
+
     @Nullable
     @Override
     public IBinder onBind(Intent intent) {
@@ -32,10 +34,10 @@ public class FindLocation extends Service {
             public void onLocationChanged(Location location) {
                 Utils.latitude= location.getLatitude();
                 Utils.longitude=location.getLongitude();
-                Intent i = new Intent("location_update");
+              /*  Intent i = new Intent("location_update");
                 i.putExtra("latitude",location.getLatitude());
                 i.putExtra("longitude",location.getLongitude());
-                sendBroadcast(i);
+                sendBroadcast(i);*/
             }
 
             @Override
@@ -68,4 +70,5 @@ public class FindLocation extends Service {
             locationManager.removeUpdates(listener);
         }
     }
+
 }
