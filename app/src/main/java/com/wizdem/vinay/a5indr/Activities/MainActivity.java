@@ -152,6 +152,8 @@ public class MainActivity extends AppCompatActivity {
     //    String stamp = mDateStamp.format(new Date());
         SaveLocation saveLocation = new SaveLocation(message,latitude,longitude,time);
         mFirebaseDB_Reference.child("Location").child(Utils.uid).child(mStamp).setValue(saveLocation);
+       // mFirebaseDB_Reference.child("Entry").child(mStamp).setValue(saveLocation);
+
 
 
     }
